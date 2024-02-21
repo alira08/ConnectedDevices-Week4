@@ -1,0 +1,112 @@
+[
+    {
+        "id": "6f862fe1e1e130ac",
+        "type": "tab",
+        "label": "Flow 2",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "fa056d3e3caef823",
+        "type": "mqtt in",
+        "z": "6f862fe1e1e130ac",
+        "name": "",
+        "topic": "CarnalInformation",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "fcccb7723bd814aa",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 210,
+        "y": 240,
+        "wires": [
+            [
+                "c3edfd4670cb391d",
+                "52de5fc1a41dc8dd"
+            ]
+        ]
+    },
+    {
+        "id": "c3edfd4670cb391d",
+        "type": "debug",
+        "z": "6f862fe1e1e130ac",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 550,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c875e0117fcb2147",
+        "type": "udp out",
+        "z": "6f862fe1e1e130ac",
+        "name": "",
+        "addr": "",
+        "iface": "",
+        "port": "",
+        "ipv": "udp4",
+        "outport": "",
+        "base64": false,
+        "multicast": "false",
+        "x": 550,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "52de5fc1a41dc8dd",
+        "type": "websocket out",
+        "z": "6f862fe1e1e130ac",
+        "name": "",
+        "server": "ac4803508b5a07bf",
+        "client": "",
+        "x": 580,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "fcccb7723bd814aa",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "https://theyonetwork.cloud.shiftr.io/",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "ac4803508b5a07bf",
+        "type": "websocket-listener",
+        "path": "/mainpage",
+        "wholemsg": "false"
+    }
+]

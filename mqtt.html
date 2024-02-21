@@ -1,0 +1,99 @@
+<html>
+<head>
+    <title>Andre's MQTT Data</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.min.js" type="text/javascript"></script>
+</head>
+
+<body>
+
+    <p id="inTopic"></p>
+    <p id="timestamp"></p>
+    <b><p style="font-size: 40px;" id="inPayload"></p></b>
+
+    <div id="dataRectangle" style="height: 40px; width: 100px; background: linear-gradient(to right, #0000FF, #00BFFF); transition: width 0.1s;">DISTANCE VISUALIZED</div>
+
+    <div id="mqtt-data"></div>
+    <div id="box" style="border: 1px solid black; background: linear-gradient(to right, #0000FF, #00BFFF);"></div>
+
+    <script>
+        const broker = "theyonetwork.cloud.shiftr.io";
+        const mqtt_port = 443;
+        const mqtt_user = "theyonetwork";
+        const mqtt_pass = "ConnDevSP24";
+        const clientID = "my_client";
+        const subTopic = "TOF_Sensor_Data";
+        const MQTT = new Paho.MQTT.Client(broker, mqtt_port, clientID);
+
+        var client = new Paho.MQTT.Client(broker, mqtt_port, clientID);
+
+        client.onConnectionLost = onConnectionLost;
+        client.onMessageArrived = onMessageArrived;
+
+        client.connect({
+            onSuccess: onConnect,
+            onFailure: onFailure
+        });
+
+        function onConnect() {
+            console.log('Connected to MQTT broker');
+            client.subscribe(subTopic);
+        }
+
+        function onConnectionLost(responseObject) {
+            if (responseObject.errorCode !== 0) {
+                console.log('Connection lost: ' + responseObject.errorMessage);
+            }
+        }
+
+        function onMessageArrived(message) {
+            // const distance = int(message.payloadString);
+            
+            // Update the rectangle width based on the incoming data
+            // const normalizedWidth = Math.min(distance, 370);
+            // document.getElementById('dataRectangle').style.width = distance + 'px';
+
+            // Update the text content for debugging
+            // document.getElementById('inTopic').innerHTML = `Timestamp: ${new Date().toLocaleTimeString()}`;
+            // document.getElementById('inPayload').innerHTML = `Distance: ${distance}`;
+        }
+
+        function onFailure(errorMessage) {
+            console.log('Connection failed: ' + errorMessage.errorMessage);
+        }
+
+        MQTT.connect({
+            onSuccess: mqttConnected,
+            userName: mqtt_user,
+            password: mqtt_pass,
+            useSSL: true
+        });
+
+        function mqttConnected() {
+            MQTT.subscribe(subTopic);
+            MQTT.onMessageArrived = handleMQTTMessage;
+            console.log("MQTT connected successfully.");
+            //document.querySelector("#sendMQTTButton").disabled = false;
+        }
+
+        function sendMQTTMessage(topic, payload) {
+            const newMessage = new Paho.MQTT.Message(payload);
+            newMessage.destinationName = topic;
+            MQTT.send(newMessage);
+        }
+
+        function handleMQTTMessage(msg) {
+           document.querySelector("#inTopic").innerHTML = `The below output is the distance, in millimeters, of the sensor in my NIME instrument. ${msg.destinationName}`;
+           document.querySelector("#timestamp").innerHTML = `Timestamp: ${new Date().toLocaleTimeString()}`; 
+           document.querySelector("#inPayload").innerHTML = msg.payloadString;
+
+           const distance = parseFloat(msg.payloadString);
+            const boxSize = distance * 2; // Adjust the multiplier as needed
+            // document.getElementById('mqtt-data').innerHTML = distance; // Display the distance
+            document.getElementById('box').style.width = boxSize + 'px';
+            document.getElementById('box').style.height = '40px';
+
+        }
+    </script>
+
+</body>
+</html>
